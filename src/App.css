@@ -1,0 +1,10 @@
+.slick-next,
+.slick-prev {
+  color: black !important;
+}
+
+.card-shadom {
+  -webkit-box-shadow: -7px 7px 5px 0px rgba(0, 0, 0, 0.38);
+  -moz-box-shadow: -7px 7px 5px 0px rgba(0, 0, 0, 0.38);
+  box-shadow: -7px 7px 5px 0px rgba(0, 0, 0, 0.38);
+}
