@@ -121,7 +121,7 @@ const Hoteles = () => {
     <div className="min-h-screen justify-center w-full lg:min-w-[1355px] bg-[#FCFCFE] px-2 ">
       <Header />
       <div className="pt-24 lg:pt-32 flex justify-center">
-        <div className="w-full max-w-[1280px] bg-slate-400 lg:min-w-[1280px] min-h-[700px] bg-no-repeat bg-cover bg-center rounded-2xl flex flex-col justify-end pb-16 pl-8 bg-[url('https://plus.unsplash.com/premium_photo-1661676056771-f6c2711249e0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG90ZWx8ZW58MHx8MHx8fDA%3D')]">
+        <div className="w-full max-w-[1280px] bg-slate-400 lg:min-w-[1280px] min-h-[700px] bg-no-repeat bg-cover bg-center rounded-2xl flex flex-col justify-end pb-16 pl-8 bg-[url('https://plus.unsplash.com/premium_photo-1661676056771-f6c2711249e0?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
           <Typography className="text-3xl text-white font-bold">
             Ven y disfruta de un rato agradable con nuestros <br /> mejores
             hoteles
@@ -168,18 +168,20 @@ const Hoteles = () => {
             />
           </div>
         </div>
-        <div className="w-full lg:min-w-[1280px] max-w-[1280px] my-12">
-          <Typography className="text-2xl font-semibold mb-2">
-            Descubre tu nuevo hospedaje favorito
-          </Typography>
+        <div>
+          <div className="w-full lg:min-w-[1280px] max-w-[1280px] my-12">
+            <Typography className="text-2xl font-semibold mb-2">
+              Descubre tu nuevo hospedaje favorito
+            </Typography>
 
-          <Carousel items={data} type={"cardHotel"} />
-        </div>
-        <div
-          ref={resultadoRef}
-          className=" pt-24 lg:pt-32 w-full lg:min-w-[1280px] max-w-[1280px]"
-        >
-          {openResults && <SearchHotel dataResult={data} />}
+            <Carousel items={data} type={"cardHotel"} />
+          </div>
+          <div
+            ref={resultadoRef}
+            className=" pt-24 lg:pt-32 w-full lg:min-w-[1280px] max-w-[1280px]"
+          >
+            {openResults && <SearchHotel dataResult={data} />}
+          </div>
         </div>
       </div>
     </div>

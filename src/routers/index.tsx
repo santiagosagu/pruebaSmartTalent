@@ -5,12 +5,18 @@ import ErrorPage from "../page/ErrorPage";
 import Login from "../page/login/Login";
 import Hoteles from "../page/hoteles";
 import ChooseRom from "../page/chooseRom";
+import Flights from "../page/flights";
 // import Users from '../modulos/users';
 // import { CountriesModule } from '../modulos/countries';
 // import { MaterialsModule } from '../modulos/materials';
 
 const useRouterApp = () => {
   const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Flights />,
+      errorElement: <ErrorPage />,
+    },
     {
       path: "/hoteles",
       element: <Hoteles />,

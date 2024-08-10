@@ -14,7 +14,7 @@ interface IProps {
 
 const CardCarouselHotel = ({ item, navigation }: IProps) => {
   return (
-    <div className="carousel-card" onClick={navigation}>
+    <div className="carousel-card flex justify-center" onClick={navigation}>
       <div className="w-[276px] h-full border card-shadom rounded-lg">
         <img src={item.image} alt="" className="w-full rounded-lg h-[183px]" />
         <div className="flex flex-col justify-evenly px-2 mt-4 h-48">
