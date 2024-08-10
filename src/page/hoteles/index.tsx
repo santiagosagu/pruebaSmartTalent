@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRef, useState } from "react";
 import { Input, Typography } from "antd";
 import { DatePicker } from "antd";
-
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import PageviewIcon from "@mui/icons-material/Pageview";
-// import Carrusel from "../../components/currusel";
 import Header from "../../components/header";
 import Carousel from "../../components/carousel";
-import { useRef, useState } from "react";
 import SearchHotel from "./components/SearchHotel";
 import useScrollToElement from "../../hooks/useScrollToElement";
+import useGetList from "../../api/services/getServices/useGetList";
 
 interface IFilters {
   lugar: string;
@@ -35,6 +36,8 @@ const Hoteles = () => {
 
   const scrollToElement = useScrollToElement(resultadoRef);
 
+  const { RangePicker } = DatePicker;
+
   const handleFiltersHotels = () => {
     if (filters.lugar) {
       setOpenResults(true);
@@ -42,80 +45,17 @@ const Hoteles = () => {
     }
   };
 
-  const { RangePicker } = DatePicker;
+  const navigate = useNavigate();
 
-  const data = [
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEKZFttZ5lqIE3B4ec1LHUYWWNDU1MVJ5ud_7KEsr8f_ENoq2h",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Envigado",
-      valor: "264.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR0lOz25QUHwGTLYO5rsOjGTS5PErHteo1otiU9wbmM1_tMj-ID",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Bello",
-      valor: "180.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRt4FU4PapruWon3qh87018CPVFjfOcIla2LCmk-GBmv7Y8fVOx",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Itagui",
-      valor: "300.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTGwxpXdvUrimdGB2pIeE3_6UnTWoT3kB_qXYpg6OFNt-WpiRgq",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Medellin",
-      valor: "250.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ9qYrr8IPtv7PwiX5KdIm7uZj8W4CrmMzbN8bYHmFCukU4ATjW",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "La ceja",
-      valor: "264.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcToGpyO5yfZ4kIIX93B7aEzukAmfsIFIW0-roQ5xeUNAi7W8ztX",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Milan",
-      valor: "280.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb_QK80wglGpPtdVmQ4QiXSz1fc7JFc4eqFN9fG-pjipH8hoPQ",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Paris",
-      valor: "264.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQSeZmqtfYFCLdzImKCECC0TDrzJAgkHqP42Aq3lqAIcwgmEp5w",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Barcelona",
-      valor: "270.000",
-    },
-    {
-      image:
-        "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSTZ69teWM42_jh5Q4ak6Z7hXENxyM071vX2Kvf0GFzj6QRWyAt",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Madrid",
-      valor: "270.000",
-    },
-    {
-      image:
-        "https://lh5.googleusercontent.com/p/AF1QipOHsnjKy-Gm9IYHvvObDXo0WNNnNTanuACNPlx_=w360-h240-n-k-no",
-      name: "Jardín de Silleteros Agro Parque Hotel",
-      lugar: "Paris",
-      valor: "400.000",
-    },
-  ];
+  const handleNavigate = () => {
+    navigate("/habitaciones/1");
+  };
+
+  const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetList({
+    key: "hotelesFlights",
+    resource: ["hoteles"],
+    keyResults: "hoteles",
+  });
 
   return (
     <div className="min-h-screen justify-center w-full lg:min-w-[1355px] bg-[#FCFCFE] px-2 ">
@@ -173,14 +113,20 @@ const Hoteles = () => {
             <Typography className="text-2xl font-semibold mb-2">
               Descubre tu nuevo hospedaje favorito
             </Typography>
-
-            <Carousel items={data} type={"cardHotel"} />
+            {isLoadingHoteles && <CircularProgress />}
+            {dataHoteles && (
+              <Carousel
+                items={dataHoteles}
+                type={"cardHotel"}
+                navigation={handleNavigate}
+              />
+            )}
           </div>
           <div
             ref={resultadoRef}
             className=" pt-24 lg:pt-32 w-full lg:min-w-[1280px] max-w-[1280px]"
           >
-            {openResults && <SearchHotel dataResult={data} />}
+            {openResults && <SearchHotel dataResult={dataHoteles} />}
           </div>
         </div>
       </div>

@@ -1,15 +1,8 @@
 import { Typography } from "antd";
-
-interface IDataPaquete {
-  image: string;
-  location: string;
-  hotelName: string;
-  alimentacion: string;
-  valor: string;
-}
+import { IitemsPaquetesVendidos } from "../../../interfaces/flights";
 
 interface IProps {
-  item: IDataPaquete;
+  item: IitemsPaquetesVendidos;
 }
 
 const CardCarouselPaquetesVendidos = ({ item }: IProps) => {

@@ -1,9 +1,9 @@
 import { Avatar, Box } from "@mui/material";
 import { memo } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Popover, Typography } from "antd";
-import ContentLogout from "../layout/ContentLogout";
-import Profile from "../layout/Profile";
+import { Typography } from "antd";
+// import ContentLogout from "../layout/ContentLogout";
+// import Profile from "../layout/Profile";
 import { Link } from "react-router-dom";
 
 const Header = memo(() => {
@@ -25,21 +25,24 @@ const Header = memo(() => {
             sx={{ width: 40, height: 40 }}
             src="/images/android-chrome-512x512.png"
           />
-          <Typography className="font-bold text-base">Hoteles Sagu</Typography>
+          <Typography className="font-bold text-base">Viajes Sagu</Typography>
         </div>
         <div className="p-0 lg:flex items-center gap-4 hidden ">
+          <Link className="font-semibold" to={"/"}>
+            Viajes
+          </Link>
           <Link className="font-semibold" to={"/hoteles"}>
             Hoteles
           </Link>
         </div>
-        <Popover content={<ContentLogout />}>
+        {/* <Popover content={<ContentLogout />}>
           <div className="cursor-pointer">
             <Profile
               image={"https://mui.com/static/images/avatar/2.jpg"}
               name={"Santiago G"}
             />
           </div>
-        </Popover>
+        </Popover> */}
       </Box>
     </div>
   );

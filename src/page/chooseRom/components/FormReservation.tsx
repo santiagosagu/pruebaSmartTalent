@@ -1,12 +1,12 @@
 import { Input } from "antd";
-import { Person } from "..";
+import { Iperson } from "../../../interfaces/chooseRom";
 
 interface Iprops {
-  person: Person;
+  person: Iperson;
   index: number;
   handlePersonChange: (
     index: number,
-    field: keyof Person,
+    field: keyof Iperson,
     value: string
   ) => void;
 }
