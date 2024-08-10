@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/layout/LayoutAdmin";
 // import Dashboard from '../modulos/dashboard/index';
 import ErrorPage from "../page/ErrorPage";
-import Login from "../page/login/Login";
 import Hoteles from "../page/hoteles";
 import ChooseRom from "../page/chooseRom";
 import Flights from "../page/flights";
@@ -49,11 +48,6 @@ const useRouterApp = () => {
         //   element: <MaterialsModule />,
         // },
       ],
-    },
-    {
-      path: "/login",
-      element: <Login />,
-      errorElement: <ErrorPage />,
     },
   ]);
 
