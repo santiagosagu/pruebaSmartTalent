@@ -10,11 +10,11 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { Link } from 'react-router-dom';
-import { Key, memo } from 'react';
+import { Link } from "react-router-dom";
+import { memo } from "react";
 
 interface IChildrens {
   name: string;
@@ -36,32 +36,34 @@ const Sidebar = memo(({ navigationList }: Iprops) => {
   return (
     <Box
       sx={{ width: 208, paddingBottom: 5 }}
-      role='presentation'
-      className=' md:fixed bg-[#FCFCFE] h-full z-[2000] mt-4 overflow-y-auto custom-scrollbar'>
+      role="presentation"
+      className=" md:fixed bg-[#FCFCFE] h-full z-[2000] mt-4 overflow-y-auto custom-scrollbar"
+    >
       <List>
-        {navigationList.map((item: INavigationList, index: Key) => {
+        {navigationList.map((item: INavigationList, index) => {
           if (item?.childrens.length > 0) {
             return (
-              <div className='w-[200px] mb-1' key={index}>
+              <div className="w-[200px] mb-1" key={index}>
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls='panel1-content'
-                    id='panel1-header'
-                    className='border-b'>
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    className="border-b"
+                  >
                     {item.icon}
-                    <Typography className='ml-7' ml={2}>
+                    <Typography className="ml-7" ml={2}>
                       {item.name}
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails className='border-t border-slate-400'>
+                  <AccordionDetails className="border-t border-slate-400">
                     {item.childrens.map((children, index) => (
                       <Link to={children.path} key={index}>
                         <ListItem>
                           {children.icon}
                           <ListItemText
                             primary={children.name}
-                            className='ml-4'
+                            className="ml-4"
                           />
                         </ListItem>
                       </Link>
@@ -76,7 +78,7 @@ const Sidebar = memo(({ navigationList }: Iprops) => {
                 <ListItem key={index} disablePadding>
                   <ListItemButton>
                     <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.name} className='capitalize' />
+                    <ListItemText primary={item.name} className="capitalize" />
                   </ListItemButton>
                 </ListItem>
               </Link>

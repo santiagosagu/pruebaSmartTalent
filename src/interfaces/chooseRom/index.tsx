@@ -16,4 +16,5 @@ export interface IDataHabitacion {
   desayuno: boolean;
   estacionamiento: boolean;
   valor: string;
+  disponible: boolean;
 }

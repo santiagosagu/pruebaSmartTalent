@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input, Typography } from "antd";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import FlatwareIcon from "@mui/icons-material/Flatware";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormReservation from "./components/FormReservation";
 import Header from "../../components/header";
 import { IDataHabitacion, Iperson } from "../../interfaces/chooseRom";
-import useGetOne from "../../api/services/getServices/useGetOne";
+// import useGetOne from "../../api/services/getServices/useGetOne";
 import { CircularProgress } from "@mui/material";
+import useGetServices from "../../api/services/useGetServices";
 // import { useParams } from "react-router-dom";
 
 const ChooseRom = () => {
+  const [dataHotel, setDataHotel] = useState<any>([]);
   const [numberOfPeople, setNumberOfPeople] = useState(0);
   const [people, setPeople] = useState<Iperson[]>([]);
 
@@ -21,11 +24,27 @@ const ChooseRom = () => {
     index: 0,
   });
 
+  const filters = [
+    ["disponible", "==", false],
+    ["lugar", "==", "Bello"],
+  ];
+
   const { data: dataSingleHoteles, isLoading: isLoadingSingleHoteles } =
-    useGetOne({
-      key: "singleHotel",
-      resource: ["hoteles", "/1"],
+    useGetServices({
+      key: "hoteleSingle",
+      collectionName: "hoteles",
+      filters,
     });
+
+  useEffect(() => {
+    setDataHotel(dataSingleHoteles);
+  }, [dataSingleHoteles]);
+
+  // const { data: dataSingleHoteles, isLoading: isLoadingSingleHoteles } =
+  //   useGetOne({
+  //     key: "singleHotel",
+  //     resource: ["hoteles", "/1"],
+  //   });
 
   const handleOpenForm = (index: number) => {
     setOpen({ status: !open.status, index });
@@ -70,13 +89,13 @@ const ChooseRom = () => {
     setPeople(updatedPeople);
   };
 
-  const handleReservation = (id: string) => {
-    console.log("Reservación:", {
-      idHotel: dataSingleHoteles.nameHotel,
-      idHabitacion: id,
-      people,
-    });
-  };
+  // const handleReservation = (id: string) => {
+  //   console.log("Reservación:", {
+  //     idHotel: dataSingleHoteles.nameHotel,
+  //     idHabitacion: id,
+  //     people,
+  //   });
+  // };
 
   // const { id } = useParams();
 
@@ -104,7 +123,7 @@ const ChooseRom = () => {
           {isLoadingSingleHoteles && <CircularProgress />}
           {dataSingleHoteles && (
             <div>
-              {dataSingleHoteles.habitaciones.map(
+              {dataHotel.habitaciones.map(
                 (item: IDataHabitacion, index: number) => (
                   <div className="mb-4 card-shadom" key={index}>
                     <div className="md:flex border rounded-t-lg">
@@ -173,7 +192,7 @@ const ChooseRom = () => {
                             <div className="flex justify-end">
                               <button
                                 className=""
-                                onClick={() => handleReservation(item.id)}
+                                // onClick={() => handleReservation(item.id)}
                               >
                                 Confirmar
                               </button>

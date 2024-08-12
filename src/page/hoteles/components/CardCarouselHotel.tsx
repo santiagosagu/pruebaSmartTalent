@@ -1,14 +1,8 @@
 import { Typography } from "antd";
-
-interface IData {
-  image: string;
-  name: string;
-  lugar: string;
-  valor: string;
-}
+import { Ihoteles } from "../../../interfaces/hoteles";
 
 interface IProps {
-  item: IData;
+  item: Ihoteles;
   navigation: () => void;
 }
 

@@ -4,9 +4,9 @@ import Carousel from "../../components/carousel";
 import { useNavigate } from "react-router-dom";
 import CardMejoresPrecios from "./components/CardMejoresPrecios";
 import { IiTemsMejoresPrecios } from "../../interfaces/flights";
-import useGetList from "../../api/services/getServices/useGetList";
 import { CircularProgress } from "@mui/material";
 import { itemsSectionMejoresPrecios } from "./constants/itemsSectionMejoresPrecios";
+import useGetServices from "../../api/services/useGetServices";
 
 const Flights = () => {
   const navigate = useNavigate();
@@ -19,20 +19,19 @@ const Flights = () => {
     navigate("/habitaciones/1");
   };
 
-  const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetList({
-    key: "hotelesFlights",
-    resource: ["hoteles"],
-    keyResults: "hoteles",
+  const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetServices({
+    key: "hoteles",
+    collectionName: "hoteles",
   });
 
-  const {
-    data: dataPaquetesMasVendidos,
-    isLoading: isLoadingPaquetesMasVendidos,
-  } = useGetList({
-    key: "paquetesMasVendidos",
-    resource: ["paquetes-mas-vendidos"],
-    keyResults: "paquetesMasVendidos",
-  });
+  // const {
+  //   data: dataPaquetesMasVendidos,
+  //   isLoading: isLoadingPaquetesMasVendidos,
+  // } = useGetList({
+  //   key: "paquetesMasVendidos",
+  //   resource: ["paquetes-mas-vendidos"],
+  //   keyResults: "paquetesMasVendidos",
+  // });
 
   return (
     <div className="min-h-screen justify-center w-full lg:min-w-[1355px] bg-[#f4f1f1]  ">
@@ -85,13 +84,13 @@ const Flights = () => {
             <Typography className="text-xl font-semibold mb-2">
               Paquetes más vendidos
             </Typography>
-            {isLoadingPaquetesMasVendidos && <CircularProgress />}
-            {dataPaquetesMasVendidos && (
+            {/* {isLoadingPaquetesMasVendidos && <CircularProgress />} */}
+            {/* {dataPaquetesMasVendidos && (
               <Carousel
                 items={dataPaquetesMasVendidos}
                 type={"paquetesVendidos"}
               />
-            )}
+            )} */}
           </div>
         </div>
       </div>

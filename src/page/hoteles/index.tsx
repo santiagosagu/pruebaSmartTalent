@@ -9,7 +9,7 @@ import Header from "../../components/header";
 import Carousel from "../../components/carousel";
 import SearchHotel from "./components/SearchHotel";
 import useScrollToElement from "../../hooks/useScrollToElement";
-import useGetList from "../../api/services/getServices/useGetList";
+import useGetServices from "../../api/services/useGetServices";
 
 interface IFilters {
   lugar: string;
@@ -51,10 +51,9 @@ const Hoteles = () => {
     navigate("/habitaciones/1");
   };
 
-  const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetList({
-    key: "hotelesFlights",
-    resource: ["hoteles"],
-    keyResults: "hoteles",
+  const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetServices({
+    key: "hoteles",
+    collectionName: "hoteles",
   });
 
   return (

@@ -1,27 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./style.css";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CardCarouselHotel from "../../page/hoteles/components/CardCarouselHotel";
 import CardCarouselPaquetesVendidos from "../../page/flights/components/CardCarouselPaquetesVendidos";
-
-const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(window.matchMedia(query).matches);
-
-  useEffect(() => {
-    const mediaQueryList = window.matchMedia(query);
-    const listener = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-    mediaQueryList.addEventListener("change", listener);
-    return () => {
-      mediaQueryList.removeEventListener("change", listener);
-    };
-  }, [query]);
-
-  return matches;
-};
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 const Carousel = ({ items, type, navigation }: any) => {
   const isMobile = useMediaQuery("(max-width: 640px)");
