@@ -6,11 +6,9 @@ import ChooseRom from "../page/chooseRom";
 import Flights from "../page/flights";
 import Login from "../page/login/Login";
 import Dashboard from "../modules/dashboard";
-import TestFirebase from "../modules/TestFirebase";
 import NewHotel from "../modules/newHotel";
-// import Users from '../modulos/users';
-// import { CountriesModule } from '../modulos/countries';
-// import { MaterialsModule } from '../modulos/materials';
+import EditHotel from "../modules/editHotel";
+import Recervation from "../modules/reservation";
 
 const useRouterApp = () => {
   const router = createBrowserRouter([
@@ -20,12 +18,17 @@ const useRouterApp = () => {
       errorElement: <ErrorPage />,
     },
     {
+      path: "/login",
+      element: <Login />,
+      errorElement: <ErrorPage />,
+    },
+    {
       path: "/hoteles",
       element: <Hoteles />,
       errorElement: <ErrorPage />,
     },
     {
-      path: "/habitaciones/:id",
+      path: "habitaciones/:id",
       element: <ChooseRom />,
       errorElement: <ErrorPage />,
     },
@@ -44,12 +47,16 @@ const useRouterApp = () => {
           element: <Dashboard />,
         },
         {
-          path: "testfirebase",
-          element: <TestFirebase />,
-        },
-        {
           path: "nuevo-hotel",
           element: <NewHotel />,
+        },
+        {
+          path: "editar-hotel/:id",
+          element: <EditHotel />,
+        },
+        {
+          path: "reservas",
+          element: <Recervation />,
         },
         // {
         //   path: '/usuarios',

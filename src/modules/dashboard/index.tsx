@@ -2,11 +2,37 @@
 import { Table, Typography } from "antd";
 import useGetServices from "../../api/services/useGetServices";
 import { CircularProgress } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMutationServices } from "../../api/services/useUpdateDocument";
+import ColumnsTableStatatusHotel from "./components/ColumnsTableStatatusHotel";
+import { useState } from "react";
+
+const columnsTest: any = [
+  {
+    title: "Imagen",
+    dataIndex: "image",
+    key: "image",
+    render: (image: string) => (
+      <img
+        src={image}
+        alt=""
+        className="w-[119px] h-[119px] lg:h-full object-cover rounded-lg"
+      />
+    ),
+  },
+  { title: "Nombre", dataIndex: "nombre", key: "name" },
+  { title: "valor", dataIndex: "valor", key: "valor" },
+  {
+    title: "Status",
+    dataIndex: "disponible",
+    key: "disponible",
+    render: (status: boolean) => (
+      <Typography>{status ? "Disponible" : "No Disponible"}</Typography>
+    ),
+  },
+];
 
 const Dashboard = () => {
-  const queryClient = useQueryClient();
+  const columns = ColumnsTableStatatusHotel();
+  const [expandedRowKeys, setExpandedRowKeys] = useState<any>([]);
 
   const { data: dataHotelesActivos, isLoading: isLoadingHotelesActivos } =
     useGetServices({
@@ -22,107 +48,20 @@ const Dashboard = () => {
       filters: [["disponible", "==", false]],
     });
 
-  const {
-    mutate: updateHotel,
-    isError,
-    isSuccess,
-  } = useMutationServices({
-    type: "update",
-    collectionName: "hoteles",
-    docId: "3DTDjSWV271RPyRqLAx8",
-  });
+  const onExpand = (
+    expanded: any,
+    record: {
+      id: any;
+      key: any;
+    }
+  ) => {
+    const keys = expanded ? [record.id] : [];
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const updates = {
-      disponible: false,
-    };
-
-    updateHotel(updates);
+    setExpandedRowKeys(keys);
   };
 
-  if (isSuccess) {
-    queryClient.invalidateQueries({
-      queryKey: ["hotelesActivos"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["hotelesInactivos"],
-    });
-  }
-
-  if (isError) {
-    console.log(isError);
-  }
-
-  const columns = [
-    {
-      title: "Imagen",
-      dataIndex: "image",
-      key: "image",
-      render: (image: string) => (
-        <img
-          src={image}
-          alt=""
-          className="w-[119px] h-[119px] lg:h-full object-cover rounded-lg"
-        />
-      ),
-    },
-    {
-      title: "Nombre",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Lugar",
-      dataIndex: "lugar",
-      key: "lugar",
-    },
-    {
-      title: "Cantidad Habitaciones",
-      dataIndex: "habitaciones",
-      key: "habitaciones",
-      render: (habitaciones: any) => (
-        <Typography>{habitaciones.length}</Typography>
-      ),
-    },
-    {
-      title: "Habitaciones Activas",
-      dataIndex: "habitaciones",
-      key: "habitacionesActivas",
-      render: (habitaciones: any) => {
-        const habitacionesActivas = habitaciones.filter(
-          (item: any) => item.disponible
-        );
-        return <Typography>{habitacionesActivas.length}</Typography>;
-      },
-    },
-    {
-      title: "Habitaciones Inactivas",
-      dataIndex: "habitaciones",
-      key: "habitacionesInactivas",
-      render: (habitaciones: any) => {
-        const habitacionesActivas = habitaciones.filter(
-          (item: any) => !item.disponible
-        );
-        return <Typography>{habitacionesActivas.length}</Typography>;
-      },
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: () => (
-        <div>
-          <Typography>Editar</Typography>
-          <Typography>estado</Typography>
-        </div>
-      ),
-    },
-  ];
-
   return (
-    <div className="mt-8 ">
+    <div className="mt-8">
       <div>
         <Typography className="font-semibold text-xl">
           Hoteles Activos
@@ -133,6 +72,24 @@ const Dashboard = () => {
             dataSource={dataHotelesActivos}
             columns={columns}
             scroll={{ x: 1000 }}
+            rowKey="id"
+            expandable={{
+              expandedRowKeys: expandedRowKeys,
+              onExpand: onExpand,
+              expandedRowRender: (record) => (
+                <div className="bg-[#f4f1f1] p-4 rounded-lg">
+                  <Typography className="font-semibold text-lg mb-2">
+                    Habitaciones
+                  </Typography>
+                  <Table
+                    rowKey="id"
+                    dataSource={record.habitaciones}
+                    columns={columnsTest}
+                    pagination={false}
+                  />
+                </div>
+              ),
+            }}
           />
         )}
       </div>
@@ -146,9 +103,26 @@ const Dashboard = () => {
           dataSource={dataHotelesInactivos}
           columns={columns}
           scroll={{ x: 1000 }}
+          rowKey="id"
+          expandable={{
+            expandedRowKeys: expandedRowKeys,
+            onExpand: onExpand,
+            expandedRowRender: (record) => (
+              <div className="bg-[#f4f1f1] p-4 rounded-lg">
+                <Typography className="font-semibold text-lg mb-2">
+                  Habitaciones
+                </Typography>
+                <Table
+                  rowKey="id"
+                  dataSource={record.habitaciones}
+                  columns={columnsTest}
+                  pagination={false}
+                />
+              </div>
+            ),
+          }}
         />
       </div>
-      <button onClick={handleSubmit}>dame click</button>
     </div>
   );
 };

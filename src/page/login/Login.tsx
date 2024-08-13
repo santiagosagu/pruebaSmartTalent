@@ -1,43 +1,20 @@
 import { useState } from "react";
-// import AddModeratorIcon from '@mui/icons-material/AddModerator';
-import { Avatar, TextField, Typography } from "@mui/material";
-// import { useNavigate } from 'react-router-dom';
-// import { useMutationService } from '../../api/services/testMutation';
+import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
     user: "",
     password: "",
   });
+  const navigate = useNavigate();
 
-  // const [error, setError] = useState('');
-
-  // const mutation = useMutationService({
-  //   resource: ['login'],
-  // });
-  // const navigate = useNavigate();
-
-  // const handleLogin = useCallback(() => {
-  //   if (credentials.user === 'admin' && credentials.password === 'admin') {
-  //     mutation.mutate({
-  //       user: credentials.user,
-  //       password: credentials.password,
-  //     });
-  //   } else {
-  //     setError('Invalid Credentials');
-  //   }
-  // }, [credentials, setError]);
-
-  // useEffect(() => {
-  //   if (mutation.data) {
-  //     if (mutation.data.token) {
-  //       localStorage.setItem('user', credentials.user);
-  //       navigate('/dashboard');
-  //     } else {
-  //       setError('Invalid Credentials');
-  //     }
-  //   }
-  // }, [mutation]);
+  const handleLogin = () => {
+    if (credentials.user === "admin" && credentials.password === "admin") {
+      localStorage.setItem("user", credentials.user);
+      navigate("/admin/dashboard");
+    }
+  };
 
   return (
     <div className="flex h-screen justify-center pt-40 bg-[#FCFCFE]">
@@ -70,12 +47,12 @@ const Login = () => {
             }
           />
         </div>
-        {/* <div className='mt-12'>
-          <Button variant='contained' onClick={handleLogin}>
+        <div className="mt-12">
+          <Button variant="contained" onClick={handleLogin}>
             SIGN IN
           </Button>
         </div>
-        {error && (
+        {/* {error && (
           <Alert severity='error' className='mt-4'>
             {error}
           </Alert>

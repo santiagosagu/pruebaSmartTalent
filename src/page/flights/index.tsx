@@ -15,13 +15,14 @@ const Flights = () => {
     navigate("/hoteles");
   };
 
-  const handleNavigateHabitacion = () => {
-    navigate("/habitaciones/1");
+  const handleNavigateHabitacion = (id: string) => {
+    navigate(`/habitaciones/${id}`);
   };
 
   const { data: dataHoteles, isLoading: isLoadingHoteles } = useGetServices({
-    key: "hoteles",
+    key: "hotelesActivos",
     collectionName: "hoteles",
+    filters: [["disponible", "==", true]],
   });
 
   // const {

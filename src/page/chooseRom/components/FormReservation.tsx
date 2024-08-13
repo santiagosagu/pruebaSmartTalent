@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { DatePicker, Input, Select } from "antd";
 import { Iperson } from "../../../interfaces/chooseRom";
 
 interface Iprops {
@@ -47,27 +47,37 @@ const FormReservation = ({ person, index, handlePersonChange }: Iprops) => {
           </div>
           <div className="w-full lg:flex justify-between">
             <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
-              fecha de nacimiento:
+              Fecha Nacimiento:
               <div>
-                <Input
+                <DatePicker
+                  size="large"
+                  onChange={(date) => {
+                    const formato = "YYYY-MM-DD";
+                    const fechaFormateada = date.format(formato);
+                    return handlePersonChange(
+                      index,
+                      "fechaNacimiento",
+                      fechaFormateada
+                    );
+                  }}
+                  placeholder="Fecha de inicio"
                   className="w-60 lg:ml-3"
-                  type="text"
-                  value={person.fechaNacimiento}
-                  onChange={(e) =>
-                    handlePersonChange(index, "fechaNacimiento", e.target.value)
-                  }
                 />
               </div>
             </label>
+
             <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
               Genero:
-              <div>
-                <Input
-                  className="w-60 lg:ml-3"
-                  type="text"
+              <div className="">
+                <Select
+                  style={{ width: 240 }}
+                  options={[
+                    { value: "masculino", label: "Masculino" },
+                    { value: "femenino", label: "Femenino" },
+                  ]}
                   value={person.genero}
-                  onChange={(e) =>
-                    handlePersonChange(index, "genero", e.target.value)
+                  onChange={(value) =>
+                    handlePersonChange(index, "genero", value)
                   }
                 />
               </div>
@@ -76,17 +86,21 @@ const FormReservation = ({ person, index, handlePersonChange }: Iprops) => {
           <div className="w-full lg:flex justify-between">
             <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
               Tipo de Documento:
-              <div>
-                <Input
-                  className="w-60 lg:ml-3"
-                  type="text"
+              <div className="">
+                <Select
+                  style={{ width: 240 }}
+                  options={[
+                    { value: "cc", label: "Cedula" },
+                    { value: "ti", label: "tarjeta de identidad" },
+                  ]}
                   value={person.tipoDocumento}
-                  onChange={(e) =>
-                    handlePersonChange(index, "tipoDocumento", e.target.value)
+                  onChange={(value) =>
+                    handlePersonChange(index, "tipoDocumento", value)
                   }
                 />
               </div>
             </label>
+
             <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
               Numero de Documento:
               <div>
@@ -115,6 +129,7 @@ const FormReservation = ({ person, index, handlePersonChange }: Iprops) => {
                 />
               </div>
             </label>
+
             <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
               Telefono de Contacto:
               <div>

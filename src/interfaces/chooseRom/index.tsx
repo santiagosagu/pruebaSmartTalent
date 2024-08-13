@@ -14,7 +14,8 @@ export interface IDataHabitacion {
   image: string;
   capacidad: number;
   desayuno: boolean;
-  estacionamiento: boolean;
+  parqueadero: boolean;
   valor: string;
   disponible: boolean;
+  hotel: string;
 }

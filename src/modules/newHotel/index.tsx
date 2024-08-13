@@ -1,60 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Typography, Form, Input, Select, Table, Button } from "antd";
+import { Typography, Form, Input, Select, Table, Button, Alert } from "antd";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useMutationServices } from "../../api/services/useUpdateDocument";
-
-const columns = [
-  {
-    title: "Imagen",
-    dataIndex: "image",
-    key: "image",
-    render: (image: string) => (
-      <img
-        src={image}
-        alt=""
-        className="w-[119px] h-[119px] lg:h-full object-cover rounded-lg"
-      />
-    ),
-  },
-  {
-    title: "Nombre",
-    dataIndex: "nombre",
-    key: "nombre",
-  },
-  {
-    title: "Capacidad",
-    dataIndex: "capacidad",
-    key: "capacidad",
-  },
-  {
-    title: "Desayuno incluido",
-    dataIndex: "desayuno",
-    key: "desayuno",
-    render: (desayuno: string) => (
-      <Typography>{desayuno ? "Si" : "No"}</Typography>
-    ),
-  },
-  {
-    title: "Parqueadero Gratis",
-    dataIndex: "parqueadero",
-    key: "parqueadero",
-    render: (parqueadero: string) => (
-      <Typography>{parqueadero ? "Si" : "No"}</Typography>
-    ),
-  },
-  {
-    title: "Habitacion Disponible",
-    dataIndex: "disponible",
-    key: "disponible",
-    render: (disponible: string) => (
-      <Typography>{disponible ? "Si" : "No"}</Typography>
-    ),
-  },
-];
+import ColumnsTableNewHotel from "./components/ColumnsTableNewHotel";
+import {
+  HabitacionDataInputs,
+  HotelDataInputs,
+} from "../../interfaces/newHotel";
 
 const NewHotel = () => {
-  const [hotelDataInputs, setHotelDataInputs] = useState<any>({
+  const [hotelDataInputs, setHotelDataInputs] = useState<HotelDataInputs>({
     nombre: "",
     image: "",
     ciudad: "",
@@ -63,18 +19,27 @@ const NewHotel = () => {
     disponible: true,
   });
 
-  const [habitacionDataInputs, setHabitacionDataInputs] = useState({
-    nombre: "",
-    image: "",
-    capacidad: "",
-    desayuno: true,
-    parqueadero: true,
-    disponible: true,
-  });
+  const [habitacionDataInputs, setHabitacionDataInputs] =
+    useState<HabitacionDataInputs>({
+      nombre: "",
+      image: "",
+      capacidad: "",
+      tipoHabitacion: "sencilla",
+      costoBase: "",
+      impuesto: "",
+      ubicacion: "",
+      desayuno: true,
+      parqueadero: true,
+      disponible: true,
+      ocupada: [],
+    });
 
-  console.log(hotelDataInputs);
+  const [errorHotel, setErrorHotel] = useState("");
+  const [errorHabitacion, setErrorHabitacion] = useState(false);
 
   const id = nanoid();
+
+  const columns = ColumnsTableNewHotel();
 
   const {
     mutate: addHotel,
@@ -97,148 +62,300 @@ const NewHotel = () => {
   };
 
   const addHabitacion = () => {
-    setHotelDataInputs({
-      ...hotelDataInputs,
+    if (
+      habitacionDataInputs.nombre &&
+      habitacionDataInputs.image &&
+      habitacionDataInputs.capacidad &&
+      habitacionDataInputs.ubicacion &&
+      habitacionDataInputs.costoBase &&
+      habitacionDataInputs.impuesto
+    ) {
+      const valorImpuesto =
+        (Number(habitacionDataInputs.costoBase) *
+          Number(habitacionDataInputs.impuesto)) %
+        100;
+      const valor =
+        Number(valorImpuesto) + Number(habitacionDataInputs.costoBase);
+      setHotelDataInputs({
+        ...hotelDataInputs,
 
-      habitaciones: [
-        ...hotelDataInputs.habitaciones,
-        {
-          id,
-          ...habitacionDataInputs,
-        },
-      ],
-    });
-    setHabitacionDataInputs({
-      nombre: "",
-      image: "",
-      capacidad: "",
-      desayuno: true,
-      parqueadero: true,
-      disponible: true,
-    });
+        habitaciones: [
+          ...hotelDataInputs.habitaciones,
+          {
+            id,
+            valor,
+            ...habitacionDataInputs,
+          },
+        ],
+      });
+      setHabitacionDataInputs({
+        nombre: "",
+        image: "",
+        capacidad: "",
+        tipoHabitacion: "sencilla",
+        costoBase: "",
+        impuesto: "",
+        ubicacion: "",
+        desayuno: true,
+        parqueadero: true,
+        disponible: true,
+        ocupada: [],
+      });
+    } else {
+      setErrorHabitacion(true);
+    }
   };
 
   const handleAddHotel = () => {
-    addHotel(hotelDataInputs);
+    if (
+      hotelDataInputs.nombre &&
+      hotelDataInputs.image &&
+      hotelDataInputs.ciudad &&
+      hotelDataInputs.valor &&
+      hotelDataInputs.habitaciones.length > 0
+    ) {
+      addHotel(hotelDataInputs);
+      return setHotelDataInputs({
+        nombre: "",
+        image: "",
+        ciudad: "",
+        valor: "",
+        habitaciones: [],
+        disponible: true,
+      });
+    }
+
+    if (hotelDataInputs.habitaciones.length === 0) {
+      return setErrorHotel("Ingresa por lo menos una habitacion");
+    }
+
+    setErrorHotel("Por favor completa todos los campos del hotel");
   };
 
   return (
     <div className="mt-8 w-full pl-2">
       <div>
         <Typography className="text-xl font-bold mb-10">Nuevo Hotel</Typography>
+
+        {errorHotel && (
+          <Alert message={errorHotel} type="error" className="mb-3" />
+        )}
+
         <Form className="px-4 max-w-[600px]">
-          <Form.Item
-            label="Nombre"
-            name="nombre"
-            rules={[{ required: true, message: "Please input!" }]}
-          >
-            <Input name="nombre" onChange={handleOnchageDataHotel} />
-          </Form.Item>
-          <Form.Item
-            label="Url Image"
-            name="image"
-            rules={[{ required: true, message: "Please input!" }]}
-          >
-            <Input name="image" onChange={handleOnchageDataHotel} />
-          </Form.Item>
-          <Form.Item
-            label="Ciudad"
-            name="ciudad"
-            rules={[{ required: true, message: "Please input!" }]}
-          >
-            <Input name="ciudad" onChange={handleOnchageDataHotel} />
-          </Form.Item>
-          <Form.Item
-            label="Valor"
-            name="valor"
-            rules={[{ required: true, message: "Please input!" }]}
-          >
-            <Input name="valor" onChange={handleOnchageDataHotel} />
-          </Form.Item>
+          <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+            Nombre:
+            <div className="md:w-3/4">
+              <Input
+                required
+                name="nombre"
+                value={hotelDataInputs.nombre}
+                onChange={handleOnchageDataHotel}
+              />
+            </div>
+          </label>
+
+          <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+            Url Imagen:
+            <div className="md:w-3/4">
+              <Input
+                required
+                name="image"
+                value={hotelDataInputs.image}
+                onChange={handleOnchageDataHotel}
+              />
+            </div>
+          </label>
+
+          <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+            Ciudad:
+            <div className="md:w-3/4">
+              <Input
+                required
+                name="ciudad"
+                value={hotelDataInputs.ciudad}
+                onChange={handleOnchageDataHotel}
+              />
+            </div>
+          </label>
+
+          <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+            Valor:
+            <div className="md:w-3/4">
+              <Input
+                type="number"
+                required
+                name="valor"
+                value={hotelDataInputs.valor}
+                onChange={handleOnchageDataHotel}
+              />
+            </div>
+          </label>
         </Form>
       </div>
-      <Typography className="text-xl font-bold mb-10">
+      <Typography className="text-xl font-bold my-10">
         Añadir Habitacion
       </Typography>
+      {errorHabitacion && (
+        <Alert
+          message="Por favor completa todos los campos"
+          type="error"
+          className="mb-3"
+        />
+      )}
       <Form className="px-4 max-w-[600px]">
-        <Form.Item
-          label="Nombre"
-          name="nombre"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Input name="nombre" onChange={handleOnchageDataHabitacion} />
-        </Form.Item>
-        <Form.Item
-          label="Url Image"
-          name="image"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Input name="image" onChange={handleOnchageDataHabitacion} />
-        </Form.Item>
-        <Form.Item
-          label="Capacidad"
-          name="capacidad"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Input name="capacidad" onChange={handleOnchageDataHabitacion} />
-        </Form.Item>
-        <Form.Item
-          label="Desayuno Incluido"
-          name="desayuno"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Select
-            style={{ width: 120 }}
-            options={[
-              { value: true, label: "Si" },
-              { value: false, label: "No" },
-            ]}
-            onChange={(value) =>
-              setHabitacionDataInputs({
-                ...habitacionDataInputs,
-                desayuno: value,
-              })
-            }
-          />
-        </Form.Item>
-        <Form.Item
-          label="Parqueadero Gratis"
-          name="parquedero gratis"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Select
-            style={{ width: 120 }}
-            options={[
-              { value: true, label: "Si" },
-              { value: false, label: "No" },
-            ]}
-            onChange={(value) =>
-              setHabitacionDataInputs({
-                ...habitacionDataInputs,
-                parqueadero: value,
-              })
-            }
-          />
-        </Form.Item>
-        <Form.Item
-          label="Habitacion Disponible"
-          name="habitacion disponible"
-          rules={[{ required: true, message: "Please input!" }]}
-        >
-          <Select
-            style={{ width: 120 }}
-            options={[
-              { value: true, label: "Si" },
-              { value: false, label: "No" },
-            ]}
-            onChange={(value) =>
-              setHabitacionDataInputs({
-                ...habitacionDataInputs,
-                disponible: value,
-              })
-            }
-          />
-        </Form.Item>
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Nombre:
+          <div className="md:w-3/4">
+            <Input
+              required
+              name="nombre"
+              value={habitacionDataInputs.nombre}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Url Image:
+          <div className="md:w-3/4">
+            <Input
+              name="image"
+              value={habitacionDataInputs.image}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Capacidad:
+          <div className="md:w-3/4">
+            <Input
+              type="number"
+              name="capacidad"
+              value={habitacionDataInputs.capacidad}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Tipo Habitacion:
+          <div className="w-3/4">
+            <Select
+              style={{ width: 120 }}
+              options={[
+                { value: "sencilla", label: "Sencilla" },
+                { value: "premium", label: "Premium" },
+              ]}
+              value={habitacionDataInputs.tipoHabitacion}
+              onChange={(value) =>
+                setHabitacionDataInputs({
+                  ...habitacionDataInputs,
+                  tipoHabitacion: value,
+                })
+              }
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Ubicacion:
+          <div className="md:w-3/4">
+            <Input
+              required
+              name="ubicacion"
+              placeholder="Bloque 2 piso 15 apt 1506"
+              value={habitacionDataInputs.ubicacion}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Costo Base:
+          <div className="md:w-3/4">
+            <Input
+              type="number"
+              required
+              name="costoBase"
+              value={habitacionDataInputs.costoBase}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          % Impuesto:
+          <div className="md:w-3/4">
+            <Input
+              type="number"
+              required
+              name="impuesto"
+              value={habitacionDataInputs.impuesto}
+              onChange={handleOnchageDataHabitacion}
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Desayuno incluido
+          <div className="w-3/4">
+            <Select
+              style={{ width: 120 }}
+              options={[
+                { value: true, label: "Si" },
+                { value: false, label: "No" },
+              ]}
+              value={habitacionDataInputs.desayuno}
+              onChange={(value) =>
+                setHabitacionDataInputs({
+                  ...habitacionDataInputs,
+                  desayuno: value,
+                })
+              }
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-start gap-3 mb-4">
+          Parqueadero Gratis
+          <div className="">
+            <Select
+              style={{ width: 120 }}
+              options={[
+                { value: true, label: "Si" },
+                { value: false, label: "No" },
+              ]}
+              value={habitacionDataInputs.parqueadero}
+              onChange={(value) =>
+                setHabitacionDataInputs({
+                  ...habitacionDataInputs,
+                  parqueadero: value,
+                })
+              }
+            />
+          </div>
+        </label>
+
+        <label className="lg:mr-4 md:w-[400px] md:flex justify-between gap-3 mb-4">
+          Habitacion Disponible
+          <div className="w-3/4">
+            <Select
+              style={{ width: 120 }}
+              options={[
+                { value: true, label: "Si" },
+                { value: false, label: "No" },
+              ]}
+              value={habitacionDataInputs.disponible}
+              onChange={(value) =>
+                setHabitacionDataInputs({
+                  ...habitacionDataInputs,
+                  disponible: value,
+                })
+              }
+            />
+          </div>
+        </label>
       </Form>
       <div className="flex justify-between md:px-6 my-4">
         <Button type="primary" onClick={addHabitacion}>
@@ -255,6 +372,7 @@ const NewHotel = () => {
       <Table
         dataSource={hotelDataInputs.habitaciones}
         columns={columns}
+        rowKey="id"
         scroll={{ x: 1000 }}
       />
     </div>
