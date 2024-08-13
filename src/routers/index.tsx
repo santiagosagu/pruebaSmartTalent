@@ -58,18 +58,6 @@ const useRouterApp = () => {
           path: "reservas",
           element: <Recervation />,
         },
-        // {
-        //   path: '/usuarios',
-        //   element: <Users />,
-        // },
-        // {
-        //   path: '/paises',
-        //   element: <CountriesModule />,
-        // },
-        // {
-        //   path: '/materiales',
-        //   element: <MaterialsModule />,
-        // },
       ],
     },
   ]);
