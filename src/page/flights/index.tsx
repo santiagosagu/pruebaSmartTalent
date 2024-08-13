@@ -25,6 +25,13 @@ const Flights = () => {
     filters: [["disponible", "==", true]],
   });
 
+  const {
+    data: dataPaquetesMasVendidos,
+    isLoading: isLoadingPaquetesMasVendidos,
+  } = useGetServices({
+    key: "paquetesMasVendidos",
+    collectionName: "paquetesMasVendidos",
+  });
   // const {
   //   data: dataPaquetesMasVendidos,
   //   isLoading: isLoadingPaquetesMasVendidos,
@@ -85,13 +92,13 @@ const Flights = () => {
             <Typography className="text-xl font-semibold mb-2">
               Paquetes más vendidos
             </Typography>
-            {/* {isLoadingPaquetesMasVendidos && <CircularProgress />} */}
-            {/* {dataPaquetesMasVendidos && (
+            {isLoadingPaquetesMasVendidos && <CircularProgress />}
+            {dataPaquetesMasVendidos && (
               <Carousel
                 items={dataPaquetesMasVendidos}
                 type={"paquetesVendidos"}
               />
-            )} */}
+            )}
           </div>
         </div>
       </div>

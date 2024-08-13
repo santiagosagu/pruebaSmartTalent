@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Typography, Form, Input, Select, Table, Button, Alert } from "antd";
-// import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { useMutationServices } from "../../api/services/useUpdateDocument";
 import { useNavigate, useParams } from "react-router-dom";
@@ -52,11 +51,7 @@ const EditHotel = () => {
   const [errorHotel, setErrorHotel] = useState("");
   const [errorHabitacion, setErrorHabitacion] = useState(false);
 
-  const {
-    mutate: addHotel,
-    // isError,
-    isSuccess,
-  } = useMutationServices({
+  const { mutate: addHotel, isSuccess } = useMutationServices({
     type: "update",
     collectionName: "hoteles",
     docId: id,
@@ -82,14 +77,14 @@ const EditHotel = () => {
     setHotelDataInputs({ ...hotelDataInputs, [e.target.name]: e.target.value });
   };
 
-  const handleOnchageDataHabitacion = (e: any) => {
+  const handleOnchageDataHabitacion = (e: {
+    target: { name: any; value: any };
+  }) => {
     setHabitacionDataInputs({
       ...habitacionDataInputs,
       [e.target.name]: e.target.value,
     });
   };
-
-  console.log(habitacionDataInputs, "habitacion");
 
   const addHabitacion = () => {
     if (
@@ -139,7 +134,6 @@ const EditHotel = () => {
 
       removeRoomEdit();
     } else {
-      console.log(habitacionDataInputs);
       setErrorHabitacion(true);
     }
   };

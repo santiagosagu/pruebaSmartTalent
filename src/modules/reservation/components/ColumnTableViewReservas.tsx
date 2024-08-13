@@ -74,6 +74,11 @@ const ColumnsTableViewReserva = () => {
         <Typography>{room.hotel.nombre}</Typography>
       ),
     },
+    {
+      title: "# Emergencia",
+      dataIndex: "numeroEmergencia",
+      key: "numeroEmergencia",
+    },
   ];
 
   return columns;

@@ -19,6 +19,7 @@ const SearchRoom = ({ dataSearch }: any) => {
   const [fechaInicioState, setFechaInicio] = useState<any>(null);
   const [fechaFinState, setFechaFin] = useState<any>(null);
   const [idHotel, setIdHotel] = useState("");
+  const [numeroEmergencia, setNumeroEmergencia] = useState("");
 
   const { RangePicker } = DatePicker;
 
@@ -84,7 +85,7 @@ const SearchRoom = ({ dataSearch }: any) => {
 
   const handleReservation = (item: IRoomReservation) => {
     const [fechaInicio, fechaFin] = rangoFechas;
-    const formato = "YYYY-MM-DD"; // Cambia el formato según tus necesidades
+    const formato = "YYYY-MM-DD";
     if (rangoFechas.length !== 2) {
       alert("por favor seleccione la fecha");
       return;
@@ -155,6 +156,7 @@ const SearchRoom = ({ dataSearch }: any) => {
       parqueadero,
       disponible,
       idHabitacion: id,
+      numeroEmergencia,
       valor,
       hotel: {
         id: idHotel,
@@ -178,6 +180,7 @@ const SearchRoom = ({ dataSearch }: any) => {
       status: false,
       index: 0,
     });
+    setNumeroEmergencia("");
   };
 
   return (
@@ -308,6 +311,21 @@ const SearchRoom = ({ dataSearch }: any) => {
                                 </div>
                               </label>
                             </div>
+                          </div>
+                          <div>
+                            <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
+                              Numero de Energencias:
+                              <div>
+                                <Input
+                                  className="w-60 lg:ml-3"
+                                  type="number"
+                                  value={numeroEmergencia}
+                                  onChange={(e) =>
+                                    setNumeroEmergencia(e.target.value)
+                                  }
+                                />
+                              </div>
+                            </label>
                           </div>
 
                           <div>

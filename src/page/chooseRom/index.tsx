@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import FormReservation from "./components/FormReservation";
 import Header from "../../components/header";
 import { Iperson } from "../../interfaces/chooseRom";
-// import { CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
 import useGetDocumentById from "../../api/services/useGetDocumentById";
 import { Ihoteles, IRoomReservation } from "../../interfaces/hoteles";
@@ -22,10 +22,7 @@ const ChooseRom = () => {
     []
   );
 
-  const {
-    data,
-    //  isLoading: isLoadingSingleHoteles
-  } = useGetDocumentById({
+  const { data, isLoading } = useGetDocumentById({
     key: "hotelEdit",
     collectionName: "hoteles",
     docId: idParams,
@@ -42,6 +39,7 @@ const ChooseRom = () => {
   const [rangoFechas, setRangoFechas] = useState<any>([]);
   const [fechaInicioState, setFechaInicio] = useState<any>(null);
   const [fechaFinState, setFechaFin] = useState<any>(null);
+  const [numeroEmergencia, setNumeroEmergencia] = useState("");
 
   const { RangePicker } = DatePicker;
 
@@ -106,7 +104,7 @@ const ChooseRom = () => {
 
   const handleReservation = (item: IRoomReservation) => {
     const [fechaInicio, fechaFin] = rangoFechas;
-    const formato = "YYYY-MM-DD"; // Cambia el formato según tus necesidades
+    const formato = "YYYY-MM-DD";
     if (rangoFechas.length !== 2) {
       alert("por favor seleccione la fecha");
       return;
@@ -177,6 +175,7 @@ const ChooseRom = () => {
       parqueadero,
       disponible,
       idHabitacion: id,
+      numeroEmergencia,
       valor,
       hotel: {
         id: idHotel,
@@ -200,6 +199,7 @@ const ChooseRom = () => {
       status: false,
       index: 0,
     });
+    setNumeroEmergencia("");
   };
 
   return (
@@ -219,6 +219,7 @@ const ChooseRom = () => {
           </Typography>
         </div>
         <div>
+          {isLoading && <CircularProgress />}
           {dataSingleHoteles.habitaciones && (
             <div>
               {dataSingleHoteles.habitaciones.map(
@@ -331,6 +332,21 @@ const ChooseRom = () => {
                                   </div>
                                 </label>
                               </div>
+                            </div>
+                            <div>
+                              <label className="lg:mr-4 md:w-[400px] md:flex justify-between mb-4">
+                                Numero de Energencias:
+                                <div>
+                                  <Input
+                                    className="w-60 lg:ml-3"
+                                    type="number"
+                                    value={numeroEmergencia}
+                                    onChange={(e) =>
+                                      setNumeroEmergencia(e.target.value)
+                                    }
+                                  />
+                                </div>
+                              </label>
                             </div>
 
                             <div>

@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table, Typography } from "antd";
+import { Table, TableProps, Typography } from "antd";
 import useGetServices from "../../api/services/useGetServices";
 import { CircularProgress } from "@mui/material";
 import ColumnsTableStatatusHotel from "./components/ColumnsTableStatatusHotel";
 import { useState } from "react";
 
-const columnsTest: any = [
+interface IcolumnsRooms {
+  image: string;
+  nombre: string;
+  valor: string;
+  status: boolean;
+}
+
+const columnsRooms: TableProps<IcolumnsRooms>["columns"] = [
   {
     title: "Imagen",
     dataIndex: "image",
@@ -84,7 +91,7 @@ const Dashboard = () => {
                   <Table
                     rowKey="id"
                     dataSource={record.habitaciones}
-                    columns={columnsTest}
+                    columns={columnsRooms}
                     pagination={false}
                   />
                 </div>
@@ -115,7 +122,7 @@ const Dashboard = () => {
                 <Table
                   rowKey="id"
                   dataSource={record.habitaciones}
-                  columns={columnsTest}
+                  columns={columnsRooms}
                   pagination={false}
                 />
               </div>

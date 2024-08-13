@@ -5,6 +5,21 @@ import { INavigationList } from "../Sidebar";
 
 export const navigationList: INavigationList[] = [
   {
+    name: "viajes",
+    path: "/",
+    icon: <DashboardIcon />,
+    childrens: [],
+  },
+  {
+    name: "hoteles",
+    path: "hoteles",
+    icon: <PeopleIcon fontSize="medium" />,
+    childrens: [],
+  },
+];
+
+export const navigationListAdmin: INavigationList[] = [
+  {
     name: "dashboard",
     path: "dashboard",
     icon: <DashboardIcon />,

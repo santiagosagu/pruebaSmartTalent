@@ -1,12 +1,18 @@
-import { Avatar, Box } from "@mui/material";
-import { memo } from "react";
+import { Avatar, Box, Drawer } from "@mui/material";
+import { memo, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Typography } from "antd";
-// import ContentLogout from "../layout/ContentLogout";
-// import Profile from "../layout/Profile";
 import { Link } from "react-router-dom";
+import { navigationList } from "../sidebar/constans/navigationList";
+import Sidebar from "../sidebar/Sidebar";
 
 const Header = memo(() => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+
   return (
     <div className="w-full flex justify-center fixed bg-white z-[1000] border border-b-black">
       <Box
@@ -16,7 +22,7 @@ const Header = memo(() => {
       >
         <div
           className="cursor-pointer block md:hidden"
-          // onClick={toggleDrawer(true)}
+          onClick={toggleDrawer(true)}
         >
           <MenuIcon />
         </div>
@@ -35,14 +41,13 @@ const Header = memo(() => {
             Hoteles
           </Link>
         </div>
-        {/* <Popover content={<ContentLogout />}>
-          <div className="cursor-pointer">
-            <Profile
-              image={"https://mui.com/static/images/avatar/2.jpg"}
-              name={"Santiago G"}
-            />
-          </div>
-        </Popover> */}
+        <Drawer
+          open={open}
+          className="block md:hidden"
+          onClose={toggleDrawer(false)}
+        >
+          <Sidebar navigationList={navigationList} />
+        </Drawer>
       </Box>
     </div>
   );

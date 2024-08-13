@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Popover, Typography } from "antd";
-import { navigationList } from "../sidebar/constans/navigationList";
+import { navigationListAdmin } from "../sidebar/constans/navigationList";
 import ContentLogout from "./ContentLogout";
 import Profile from "./Profile";
 
@@ -64,7 +64,7 @@ const LayoutAdmin = () => {
           item
           className="w-1/3 min-w-[200px] max-w-[250px] hidden md:block"
         >
-          <Sidebar navigationList={navigationList} />
+          <Sidebar navigationList={navigationListAdmin} />
         </Grid>
 
         <Drawer
@@ -72,7 +72,7 @@ const LayoutAdmin = () => {
           className="block md:hidden"
           onClose={toggleDrawer(false)}
         >
-          <Sidebar navigationList={navigationList} />
+          <Sidebar navigationList={navigationListAdmin} />
         </Drawer>
 
         <div className=" w-full pr-3">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { Alert, Avatar, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -7,12 +7,20 @@ const Login = () => {
     user: "",
     password: "",
   });
+
+  const [error, setError] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (credentials.user === "admin" && credentials.password === "admin") {
+    if (
+      credentials.user.toLowerCase() === "admin" &&
+      credentials.password === "admin"
+    ) {
       localStorage.setItem("user", credentials.user);
       navigate("/admin/dashboard");
+    } else {
+      setError(true);
     }
   };
 
@@ -52,11 +60,11 @@ const Login = () => {
             SIGN IN
           </Button>
         </div>
-        {/* {error && (
-          <Alert severity='error' className='mt-4'>
-            {error}
+        {error && (
+          <Alert severity="error" className="mt-4">
+            por favor ingresa con user: admin password: admin
           </Alert>
-        )} */}
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Typography, Form, Input, Select, Table, Button, Alert } from "antd";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutationServices } from "../../api/services/useUpdateDocument";
 import ColumnsTableNewHotel from "./components/ColumnsTableNewHotel";
 import {
   HabitacionDataInputs,
   HotelDataInputs,
 } from "../../interfaces/newHotel";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NewHotel = () => {
   const [hotelDataInputs, setHotelDataInputs] = useState<HotelDataInputs>({
@@ -38,17 +40,27 @@ const NewHotel = () => {
   const [errorHabitacion, setErrorHabitacion] = useState(false);
 
   const id = nanoid();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const columns = ColumnsTableNewHotel();
 
-  const {
-    mutate: addHotel,
-    // isError,
-    // isSuccess,
-  } = useMutationServices({
+  const { mutate: addHotel, isSuccess } = useMutationServices({
     type: "add",
     collectionName: "hoteles",
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/admin/dashboard");
+      queryClient.invalidateQueries({
+        queryKey: ["hotelesActivos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["hotelesInactivos"],
+      });
+    }
+  }, [isSuccess, navigate, queryClient]);
 
   const handleOnchageDataHotel = (e: any) => {
     setHotelDataInputs({ ...hotelDataInputs, [e.target.name]: e.target.value });
